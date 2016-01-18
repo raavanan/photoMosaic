@@ -36,7 +36,8 @@
     #file-input  label:hover {
         background-color: rgb(150, 30, 102);
     }
-    #tiles{position:absolute;margin: auto;top:0;bottom:0;left:0;right:0;display:none;}
+    #tiles{position:absolute;max-width: 100%;margin: auto;top:0;bottom:0;left:0;right:0;display:none;}
+
     #reset{
       display: none;
       font-size: 18px;
@@ -58,7 +59,7 @@
     </div>
     <h5 id="loader">Loading...</h5>
     <div id="before-img">
-      <img id="main-image" src="" alt="mainimage" />
+      <img style="max-width:100%" id="main-image" src="" alt="mainimage" />
       <img src="" id="tile" alt="" />
     </div>
     <div id="tiles"></div>

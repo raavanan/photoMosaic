@@ -4,7 +4,9 @@ var colorThief = new ColorThief();
 var imageWidth, imageHeight;
 var loader = document.getElementById("loader");
 var container = document.getElementById('tiles');
-
+var preview = document.getElementById('main-image');
+var numTiles = 0;
+var numTilesDone = 0;
 /*
 Handling image loaded by the user.
 
@@ -16,7 +18,7 @@ function imageUpload (){
   var file = document.getElementById('upload-image').files[0];
   //using file reader to load the image.
   var reader = new FileReader();
-  var preview = document.getElementById('main-image');
+
 
   if(file){
     reader.readAsDataURL(file);
@@ -24,16 +26,16 @@ function imageUpload (){
   reader.onloadend = function () {
     loader.innerHTML = "image loaded";
       preview.src = reader.result;
-      setTimeout(function(){
-        imageWidth = preview.width;
-        imageHeight = preview.height;
-        //get an array of image tiles
-        var imgTiles = cutImageUp(preview);
-        //draw the mosaic with image tiles.
-        drawMosaic(imgTiles);
-      },500)
-
   }
+}
+preview.onload = function(){
+  imageWidth = this.width;
+  imageHeight = this.height;
+  //get an array of image tiles
+  var imgTiles = cutImageUp(this);
+  numTiles = imgTiles.length;
+  //draw the mosaic with image tiles.
+  drawMosaic(imgTiles);
 }
 
 //functions to conver RGB color information to hex code.
@@ -65,8 +67,8 @@ function cutImageUp(img) {
         }
     }
     // imagePieces now contains data urls of all the pieces of the image
-    return imagePieces;
     loader.innerHTML ="image tiled";
+    return imagePieces;
 }
 
 // arrange the tiles to recreate the image from the pieces. so we are sure that all the pieces are where they should be.
@@ -74,8 +76,7 @@ function drawMosaic(imgTiles){
     loader.innerHTML = "Arranging images from tiles..";
    container.style.width = imageWidth+"px";
    container.style.height = imageHeight+"px";
-   for (var i = 0; i < imgTiles.length; i++) {
-     var imgTile = imgTiles[i];
+   imgTiles.forEach(function (imgTile){
      var imgElem = document.createElement("img");
      var colImg = document.getElementById("tile");
      colImg.src = imgTile.img;
@@ -84,28 +85,32 @@ function drawMosaic(imgTiles){
      imgElem.style.left = imgTile.left + "px";
      imgElem.style.top = imgTile.top + "px";
      container.appendChild(imgElem);
+     imgElem.onload = colorReplace;
+   });
+
+ loader.innerHTML = "getting colors for respective "+imgTiles.length+" tiles";
+
+}
+//replace img src with the color svg
+function colorReplace(){
+   var color = colorThief.getColor(this);
+   var hex = rgbToHex(color[0],color[1],color[2]);
+   this.src = "/color/"+hex;
+   this.onload = function (){
+     //changing the src here causes an infinite loop on onload event so an empty callback to stop that from happening
+     numTilesDone++;
+     revealImg(numTilesDone);
+     loader.innerHTML = numTilesDone+" of "+numTiles+" tiles done";
    }
- loader.innerHTML = "all the pieces are here.";
- //get color information from them.
- getSvgColors();
 }
-
-//get dominant color of each image tile and replace them with color svg from the server.
-function getSvgColors(){
-  var tiles = container.childNodes;
-  loader.innerHTML = "getting colors for respective tiles";
-  for (var i = 0; i < tiles.length; i++) {
-    var tile = tiles[i]
-    var color = colorThief.getColor(tile);
-    var hex = rgbToHex(color[0],color[1],color[2]);
-    tile.src = "/color/"+hex;
+function revealImg(numDone) {
+  if(numDone === numTiles){
+    console.log("all done");
+    container.style.display = "block";
+   document.getElementById("reset").style.display = "block";
+   loader.style.display = "none";
   }
-  container.style.display = "block";
-  document.getElementById("reset").style.display = "block";
-  loader.style.display = "none";
-
 }
-
 //reset the playing field to try a new image.
 function reset () {
   container.innerHTML = '';
