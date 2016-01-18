@@ -17,6 +17,8 @@
       width:150px;
       height:25px;
       margin:50px auto;
+      position: absolute;
+      z-index:9;
     }
     #upload-image{
       display: none;
@@ -36,8 +38,16 @@
     #file-input  label:hover {
         background-color: rgb(150, 30, 102);
     }
-    #tiles{position:absolute;max-width: 100%;margin: auto;top:0;bottom:0;left:0;right:0;display:none;}
+    #tiles{position:absolute;max-width: 100%;margin: auto;top:0;bottom:0;left:0;right:0;display:block;}
+    #tiles img {
+      opacity: 0;
 
+      transition: all 1s ease;
+      -webkit-transition:opacity 1s ease;
+      -moz-transition:opacity 1s ease;
+      -o-transition:opacity 1s ease;
+      -ms-transition:opacity 1s ease;
+    }
     #reset{
       display: none;
       font-size: 18px;
@@ -64,8 +74,12 @@
     </div>
     <div id="tiles"></div>
 
-    <script src="js/color-thief.js" type="text/javascript"></script>
+    </div>
+
+    <script type="javascript/worker" src="js/quantize.js"></script>
+    <script src="js/colorGetter.js"></script>
     <script type="text/javascript" src="js/mosaic.js"></script>
+    
     <script type="text/javascript" src="js/client.js"></script>
   </body>
 </html>
