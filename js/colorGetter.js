@@ -1,3 +1,5 @@
+//setting up a worker for quantize function as takes up a lot cpu resource.
+
 var worker = new Worker("js/quantize.js");
 
 var CanvasImage = function (image) {
@@ -35,26 +37,6 @@ CanvasImage.prototype.removeCanvas = function () {
 
 var ColorGetter = function () {};
 
-/*
- * getColor(sourceImage[, quality])
- * returns {r: num, g: num, b: num}
- *
- * Use the median cut algorithm provided by quantize.js to cluster similar
- * colors and return the base color from the largest cluster.
- *
- * Quality is an optional argument. It needs to be an integer. 1 is the highest quality settings.
- * 10 is the default. There is a trade-off between quality and speed. The bigger the number, the
- * faster a color will be returned but the greater the likelihood that it will not be the visually
- * most dominant color.
- *
- * */
-// ColorGetter.prototype.getColor = function(sourceImage, quality) {
-//     var palette       = this.getPalette(sourceImage, 5, quality);
-//     var dominantColor = palette[0];
-//     console.log(dominantColor);
-//     return dominantColor;
-// };
-
 ColorGetter.prototype.getColor = function(sourceImage, colorCount, quality) {
 
     if (typeof colorCount === 'undefined') {
@@ -91,8 +73,9 @@ ColorGetter.prototype.getColor = function(sourceImage, colorCount, quality) {
 
     // Clean up
     image.removeCanvas();
+    //listener for messages from worker
     worker.onmessage = function(e) {
-    //  console.log(e.data);
+       //console.log(e.data);
       //console.log('Message received from worker');
       gotColor(e.data[0].palette[0], e.data[0].id);
     }

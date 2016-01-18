@@ -1,39 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-
     <title>Mosaic</title>
     <style>
-    body{
-      width:100%;
-      height:100%;
-      margin:0px;
-    }
-    #before-img{
-      display: none;
-    }
-
-    #file-input{
-      width:150px;
-      height:25px;
-      margin:50px auto;
-      position: absolute;
-      z-index:9;
-    }
-    #upload-image{
-      display: none;
-    }
-    #file-input  label {
-    font-size: 1.25em;
-    font-weight: 700;
-    color: white;
-    background-color: rgb(191, 71, 111);
-    display: inline-block;
-    width:150px;
-    height:25px;
-    text-align: center;
-    padding:3px;
-    }
+    /*
+      normally I use Sass, but since i had very minimal css planned i dropped it in the head
+    */
+    body{width:100%;height:100%;margin:0px;}
+    #before-img{display: none;}
+    #file-input{width:150px;height:25px;margin:50px auto;position: absolute;left:0;right:0;top:0;bottom:0;z-index:9;}
+    #upload-image{display: none;}
+    #file-input  label {font-size: 1.25em;font-weight: 700;color: white;background-color: rgb(191, 71, 111);display: inline-block;width:150px;height:25px;text-align: center;padding:3px;}
     #file-input:focus  label,
     #file-input  label:hover {
         background-color: rgb(150, 30, 102);
@@ -41,24 +18,14 @@
     #tiles{position:absolute;max-width: 100%;margin: auto;top:0;bottom:0;left:0;right:0;display:block;}
     #tiles img {
       opacity: 0;
-
       transition: all 1s ease;
-      -webkit-transition:opacity 1s ease;
-      -moz-transition:opacity 1s ease;
-      -o-transition:opacity 1s ease;
-      -ms-transition:opacity 1s ease;
+      -webkit-transition:opacity 0.4s ease;
+      -moz-transition:opacity 0.4s ease;
+      -o-transition:opacity 0.4s ease;
+      -ms-transition:opacity 0.4s ease;
     }
-    #reset{
-      display: none;
-      font-size: 18px;
-      margin:50px;
-    }
-    #loader{
-      font-size: 18px;
-      width:100%;
-      text-align: center;
-      display: none;
-    }
+    #reset{display: none;font-size: 18px;margin:50px;}
+    #loader{font-size: 18px;width:100%;text-align: center;display: none;position: absolute;z-index:99;background-color: rgba(0,0,0,0.2)}
     </style>
   </head>
   <body>
@@ -74,12 +41,10 @@
     </div>
     <div id="tiles"></div>
 
-    </div>
 
     <script type="javascript/worker" src="js/quantize.js"></script>
     <script src="js/colorGetter.js"></script>
     <script type="text/javascript" src="js/mosaic.js"></script>
-    
     <script type="text/javascript" src="js/client.js"></script>
   </body>
 </html>

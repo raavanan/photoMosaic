@@ -1,6 +1,6 @@
+//listener for the main script.
 onmessage = function(e) {
   //console.log('Message received from main script');
-
   // using median cut algorithm
   var cmap    = MMCQ.quantize(e.data[0].pixelArray, 5);
   var palette = cmap? cmap.palette() : null;
